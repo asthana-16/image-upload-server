@@ -1,0 +1,26 @@
+{
+	"name": "image-upload-server",
+	"version": "1.0.0",
+	"main": "src/app.js",
+	"scripts": {
+		"start": "node src/app.js",
+		"start:3001": "cross-env PORT=3001 node src/app.js",
+		"start:3002": "cross-env PORT=3002 node src/app.js",
+		"start:cluster": "concurrently \"npm run start:3001\" \"npm run start:3002\"",
+		"dev": "nodemon src/app.js",
+		"test": "node -e \"require('./src/app'); console.log('app imported OK');\""
+	},
+	"dependencies": {
+		"@aws-sdk/client-s3": "^3.341.0",
+		"express": "^4.18.2",
+		"multer": "^1.4.5-lts.1",
+		"dotenv": "^16.0.3",
+		"uuid": "^9.0.0",
+		"sharp": "^0.32.1"
+	},
+	"devDependencies": {
+		"concurrently": "^8.2.0",
+		"cross-env": "^7.0.3",
+		"nodemon": "^2.0.22"
+	}
+}
