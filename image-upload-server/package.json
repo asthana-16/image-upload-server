@@ -8,7 +8,10 @@
 		"start:3002": "cross-env PORT=3002 node src/app.js",
 		"start:cluster": "concurrently \"npm run start:3001\" \"npm run start:3002\"",
 		"dev": "nodemon src/app.js",
-		"test": "node -e \"require('./src/app'); console.log('app imported OK');\""
+		"test": "node -e \"require('./src/app'); console.log('app imported OK');\"",
+		"it:up": "docker compose -f ../docker-compose.ci.yml up --build -d",
+		"it:test:windows": "powershell -ExecutionPolicy Bypass -File ../scripts/integration-test.ps1",
+		"it:down": "docker compose -f ../docker-compose.ci.yml down -v"
 	},
 	"dependencies": {
 		"@aws-sdk/client-s3": "^3.341.0",

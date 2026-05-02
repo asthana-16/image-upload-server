@@ -1,0 +1,40 @@
+version: '3.8'
+services:
+  localstack:
+    image: localstack/localstack:1.4
+    environment:
+      - SERVICES=s3
+      - DEBUG=1
+    ports:
+      - "4566:4566"
+
+  app1:
+    build: ./image-upload-server
+    environment:
+      - PORT=3001
+      - S3_ENDPOINT=http://localstack:4566
+      - AWS_REGION=us-east-1
+      - AWS_ACCESS_KEY=test
+      - AWS_SECRET_KEY=test
+      - S3_BUCKET=test-bucket
+
+  app2:
+    build: ./image-upload-server
+    environment:
+      - PORT=3002
+      - S3_ENDPOINT=http://localstack:4566
+      - AWS_REGION=us-east-1
+      - AWS_ACCESS_KEY=test
+      - AWS_SECRET_KEY=test
+      - S3_BUCKET=test-bucket
+
+  nginx:
+    image: nginx:stable-alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - app1
+      - app2
+      - localstack
