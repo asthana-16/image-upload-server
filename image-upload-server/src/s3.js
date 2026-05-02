@@ -4,13 +4,21 @@ const path = require("path");
 const sharp = require("sharp");
 require("dotenv").config();
 
-const s3 = new S3Client({
+const s3Config = {
   region: process.env.AWS_REGION,
   credentials: {
     accessKeyId: process.env.AWS_ACCESS_KEY,
     secretAccessKey: process.env.AWS_SECRET_KEY,
   },
-});
+};
+
+if (process.env.S3_ENDPOINT) {
+  s3Config.endpoint = process.env.S3_ENDPOINT;
+  // For LocalStack / custom endpoints
+  s3Config.forcePathStyle = true;
+}
+
+const s3 = new S3Client(s3Config);
 
 const buildFileName = (originalName) => {
   const ext = path.extname(originalName) || "";
